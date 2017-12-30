@@ -1,6 +1,6 @@
 {
   "name": "interpolate-webpack-plugin",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Interpolate custom variables or glob path into 'index.html'",
   "main": "index.js",
   "files": [

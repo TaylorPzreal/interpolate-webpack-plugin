@@ -24,7 +24,7 @@ yarn add -D interpolate-webpack-plugin
 ### 3. Config webpack.config.js
 
 ```js
-const InterpolateWebpackPlugin = require('interpolate-webpack-plugin);
+const InterpolateWebpackPlugin = require('interpolate-webpack-plugin');
 
 plugins: [
   new InterpolateWebpackPlugin([{
