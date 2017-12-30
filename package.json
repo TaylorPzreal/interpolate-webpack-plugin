@@ -1,0 +1,30 @@
+{
+  "name": "interpolate-webpack-plugin",
+  "version": "1.0.0",
+  "description": "Interpolate custom variables or glob path into 'index.html'",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TaylorPzreal/interpolate-webpack-plugin.git"
+  },
+  "keywords": [
+    "interpolate",
+    "webpack-plugin",
+    "inject",
+    "replace-path"
+  ],
+  "author": "TaylorPzreal <taylorpzreal@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/TaylorPzreal/interpolate-webpack-plugin/issues"
+  },
+  "homepage": "https://github.com/TaylorPzreal/interpolate-webpack-plugin#readme",
+  "dependencies": {
+    "chalk": "^2.3.0",
+    "escape-string-regexp": "^1.0.5",
+    "glob": "^7.1.2"
+  }
+}
