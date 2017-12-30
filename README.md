@@ -27,10 +27,15 @@ yarn add -D interpolate-webpack-plugin
 const InterpolateWebpackPlugin = require('interpolate-webpack-plugin');
 
 plugins: [
+  // options could be an object or array.
   new InterpolateWebpackPlugin([{
     key: 'INJECT_DLL',
     value: 'ABSOLUTELY',
-    type: 'STRING' // type can only be 'STRING' or 'PATH', default is 'STRING'. When type is 'PATH', the 'value' you could input a glob string,like process.cwd() + 'dll/*.js',but it could only resolve matched first file name.
+    type: 'STRING'
+    // type can only be 'STRING' or 'PATH', default is 'STRING'.
+    // When type is 'PATH', the 'value' you could input a glob string,like:
+    //  process.cwd() + 'dll/*.js',
+    // but it could only resolve matched first file name.
   }])
 ]
 ```
