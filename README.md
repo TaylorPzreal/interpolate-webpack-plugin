@@ -4,6 +4,8 @@
 
 It works in tandem with [HtmlWebpackPlugin](https://github.com/ampedandwired/html-webpack-plugin#events).
 
+I use it for dynamic inject library that DllPlugin generated and in React product replace '%PUBLIC_URL%'.
+
 ## Usage
 
 ### 1. Installation
@@ -34,7 +36,7 @@ plugins: [
     type: 'STRING'
     // type can only be 'STRING' or 'PATH', default is 'STRING'.
     // When type is 'PATH', the 'value' you could input a glob string,like:
-    //  process.cwd() + 'dll/*.js',
+    // process.cwd() + 'dll/*.js',
     // but it could only resolve matched first file name.
   }])
 ]
