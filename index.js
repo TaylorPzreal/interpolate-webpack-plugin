@@ -37,8 +37,11 @@ class InterpolateWebpackPlugin {
         if (err) {
           reject(err);
         }
+
+        // fix: windows path \ to /
+        const cwd = process.cwd().replace(/\\/g, '/');
   
-        const path = files[0].replace(new RegExp(escapeStringRegexp(`${process.cwd()}/`), 'g'), '');
+        const path = files[0].replace(new RegExp(escapeStringRegexp(`${cwd}/`), 'g'), '');
   
         resolve(path);
       });
