@@ -2,6 +2,10 @@
 
  interpolate-webpack-plugin
 
+## [2.1.0](https://github.com/TaylorPzreal/interpolate-webpack-plugin/compare/v2.0.0...v2.1.0) (2019-07-20)
+
+
+
 ## [2.0.0](https://github.com/TaylorPzreal/interpolate-webpack-plugin/compare/v1.0.1...v2.0.0) (2019-07-20)
 
 
