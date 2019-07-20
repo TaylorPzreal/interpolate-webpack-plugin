@@ -20,6 +20,7 @@
 const glob = require('glob');
 const chalk = require('chalk');
 const escapeStringRegexp = require('escape-string-regexp');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 /**
  * InterpolateWebpackPlugin
@@ -31,6 +32,10 @@ class InterpolateWebpackPlugin {
     this.options = options;
   }
 
+  formatPublicPath(publicPath, path) {
+    return publicPath + path.replace('./', '');
+  }
+
   transformPath(pathGlob) {
     return new Promise((resolve, reject) => {
       glob(pathGlob, (err, files) => {
@@ -40,9 +45,9 @@ class InterpolateWebpackPlugin {
 
         // fix: windows path \ to /
         const cwd = process.cwd().replace(/\\/g, '/');
-  
+
         const path = files[0].replace(new RegExp(escapeStringRegexp(`${cwd}/`), 'g'), '');
-  
+
         resolve(path);
       });
     });
@@ -53,7 +58,11 @@ class InterpolateWebpackPlugin {
       if (typeof this.options === 'object') {
         return [this.options];
       } else {
-        console.error('\n', chalk.bgRed.bold('InterpolateWebpackPlugin'), 'options wrong and will be ignored.');
+        console.error(
+          '\n',
+          chalk.bgRed.bold('InterpolateWebpackPlugin'),
+          'options wrong and will be ignored.'
+        );
         return false;
       }
     }
@@ -61,35 +70,57 @@ class InterpolateWebpackPlugin {
   }
 
   apply(compiler) {
-    compiler.plugin('compilation', compilation => {
-      compilation.plugin('html-webpack-plugin-before-html-processing', (data, callback) => {
-        const options = this.validateOptions(this.options);
-        if (options) {
-          (async () => {
-            const publicPath = data.assets.publicPath;
-            const len = options.length;
-  
-            for (let i = 0; i < len; i++) {
-              const item = options[i];
-              const key = new RegExp(`%${escapeStringRegexp(item.key)}%`, 'g');
-  
-              if (!item.type || item.type === 'STRING') {
-                data.html = data.html.replace(key, item.value);
-              } else if (item.type === 'PATH') {
-                await this.transformPath(item.value).then(path => {
-                  data.html = data.html.replace(key, publicPath + path);
-                });
-              } else {
-                console.warn('\n', chalk.bgYellow.bold('InterpolateWebpackPlugin'), `type '${item.type}' wrong will be ignored.`);
+    compiler.hooks.compilation.tap('InterpolateWebpackPlugin', compilation => {
+      HtmlWebpackPlugin.getHooks(compilation).beforeEmit.tapAsync(
+        'InterpolateWebpackPlugin',
+        (data, callback) => {
+          const options = this.validateOptions(this.options);
+
+          if (options) {
+            (async () => {
+              try {
+                const { publicPath } = compilation.outputOptions;
+                const len = options.length;
+                console.log(compilation.outputOptions);
+
+                for (let i = 0; i < len; i++) {
+                  const item = options[i];
+                  const key = new RegExp(`%${escapeStringRegexp(item.key)}%`, 'g');
+
+                  if (!item.type || item.type === 'STRING') {
+                    data.html = data.html.replace(key, item.value);
+                  } else if (item.type === 'PATH') {
+                    await this.transformPath(item.value)
+                      .then(path => {
+                        const target = publicPath ? this.formatPublicPath(publicPath, path) : path;
+                        data.html = data.html.replace(key, target);
+                      })
+                      .catch(err => {
+                        console.log(
+                          chalk.red('something error occurred, please check error stack: ')
+                        );
+                        console.error(err);
+                      });
+                  } else {
+                    console.warn(
+                      '\n',
+                      chalk.bgYellow.bold('InterpolateWebpackPlugin'),
+                      `type '${item.type}' wrong will be ignored.`
+                    );
+                  }
+                }
+
+                callback(null, data);
+              } catch (error) {
+                console.log(chalk.red('something error occurred, please check error stack: '));
+                console.error(error);
               }
-            }
-  
+            })();
+          } else {
             callback(null, data);
-          })();
-        } else {
-          callback(null, data);
+          }
         }
-      });
+      );
     });
   }
 }
