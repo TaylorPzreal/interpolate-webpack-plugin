@@ -1,13 +1,13 @@
 # interpolate-webpack-plugin
 
-> Support webpack@^4
+> Support webpack@^4, you should use html-webpack-plugin@next(now is html-webpack-plugin@^4.0.8).
 
 ![GitHub package.json version](https://img.shields.io/github/package-json/v/TaylorPzreal/interpolate-webpack-plugin.svg)
 [![CircleCI](https://circleci.com/gh/TaylorPzreal/interpolate-webpack-plugin.svg?style=svg)](https://circleci.com/gh/TaylorPzreal/interpolate-webpack-plugin)
 
 [Extend react-dev-utils/InterpolateHtmlPlugin](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-dev-utils/InterpolateHtmlPlugin.js)
 
-It works in tandem with [HtmlWebpackPlugin](https://github.com/ampedandwired/html-webpack-plugin#events).
+It works in tandem with [HtmlWebpackPlugin@next](https://github.com/ampedandwired/html-webpack-plugin#events).
 
 I use it for dynamic inject library that DllPlugin generated and in React product replace '%PUBLIC_URL%'.
 
