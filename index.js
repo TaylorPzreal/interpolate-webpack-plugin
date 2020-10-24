@@ -21,6 +21,7 @@ const glob = require('glob');
 const chalk = require('chalk');
 const escapeStringRegexp = require('escape-string-regexp');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { output } = require('./webpack.config');
 
 /**
  * InterpolateWebpackPlugin
@@ -36,7 +37,7 @@ class InterpolateWebpackPlugin {
     return publicPath + path.replace('./', '');
   }
 
-  transformPath(pathGlob) {
+  transformPath(pathGlob, prePath) {
     return new Promise((resolve, reject) => {
       glob(pathGlob, (err, files) => {
         if (err) {
@@ -44,9 +45,9 @@ class InterpolateWebpackPlugin {
         }
 
         // fix: windows path \ to /
-        const cwd = process.cwd().replace(/\\/g, '/');
+        // const cwd = process.cwd().replace(/\\/g, '/');
 
-        const path = files[0].replace(new RegExp(escapeStringRegexp(`${cwd}/`), 'g'), '');
+        const path = files[0].replace(new RegExp(escapeStringRegexp(`${prePath}/`), 'g'), '');
 
         resolve(path);
       });
@@ -70,7 +71,7 @@ class InterpolateWebpackPlugin {
   }
 
   apply(compiler) {
-    compiler.hooks.compilation.tap('InterpolateWebpackPlugin', compilation => {
+    compiler.hooks.compilation.tap('InterpolateWebpackPlugin', (compilation) => {
       HtmlWebpackPlugin.getHooks(compilation).beforeEmit.tapAsync(
         'InterpolateWebpackPlugin',
         (data, callback) => {
@@ -90,12 +91,28 @@ class InterpolateWebpackPlugin {
                   if (!item.type || item.type === 'STRING') {
                     data.html = data.html.replace(key, item.value);
                   } else if (item.type === 'PATH') {
-                    await this.transformPath(item.value)
-                      .then(path => {
+                    // fix: windows path \ to /
+                    const prePath = process.cwd().replace(/\\/g, '/');
+                    await this.transformPath(item.value, prePath)
+                      .then((path) => {
                         const target = publicPath ? this.formatPublicPath(publicPath, path) : path;
                         data.html = data.html.replace(key, target);
                       })
-                      .catch(err => {
+                      .catch((err) => {
+                        console.log(
+                          chalk.red('something error occurred, please check error stack: ')
+                        );
+                        console.error(err);
+                      });
+                  } else if (item.type === 'OUTPUTPATH') {
+                    // fix: windows path \ to /
+                    const prePath = output.path.replace(/\\/g, '/');
+                    await this.transformPath(item.value, prePath)
+                      .then((path) => {
+                        const target = publicPath ? this.formatPublicPath(publicPath, path) : path;
+                        data.html = data.html.replace(key, target);
+                      })
+                      .catch((err) => {
                         console.log(
                           chalk.red('something error occurred, please check error stack: ')
                         );

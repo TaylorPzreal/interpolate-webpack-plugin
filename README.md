@@ -39,7 +39,7 @@ plugins: [
     key: 'INJECT_DLL',
     value: 'ABSOLUTELY',
     type: 'STRING'
-    // type can only be 'STRING' or 'PATH', default is 'STRING'.
+    // type can only be 'STRING', 'PATH' or 'OUTPUTPATH', default is 'STRING'.
     // When type is 'PATH', the 'value' you could input a glob string,like:
     // process.cwd() + 'dll/*.js',
     // but it could only resolve matched first file name.
