@@ -2,6 +2,13 @@
 
  interpolate-webpack-plugin
 
+## [2.2.0](https://github.com/TaylorPzreal/interpolate-webpack-plugin/compare/v2.1.0...v2.2.0) (2020-10-24)
+
+
+### Features
+
+* support OUTPUTPATH ([a65cb27](https://github.com/TaylorPzreal/interpolate-webpack-plugin/commit/a65cb2703741995b34d5f5db016d3e72c72f8e1b))
+
 ## [2.1.0](https://github.com/TaylorPzreal/interpolate-webpack-plugin/compare/v2.0.0...v2.1.0) (2019-07-20)
 
 
