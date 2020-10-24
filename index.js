@@ -21,7 +21,6 @@ const glob = require('glob');
 const chalk = require('chalk');
 const escapeStringRegexp = require('escape-string-regexp');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const { output } = require('./webpack.config');
 
 /**
  * InterpolateWebpackPlugin
@@ -80,7 +79,7 @@ class InterpolateWebpackPlugin {
           if (options) {
             (async () => {
               try {
-                const { publicPath } = compilation.outputOptions;
+                const { publicPath, path: outputPath } = compilation.outputOptions;
                 const len = options.length;
                 console.log(compilation.outputOptions);
 
@@ -106,7 +105,7 @@ class InterpolateWebpackPlugin {
                       });
                   } else if (item.type === 'OUTPUTPATH') {
                     // fix: windows path \ to /
-                    const prePath = output.path.replace(/\\/g, '/');
+                    const prePath = outputPath.replace(/\\/g, '/');
                     await this.transformPath(item.value, prePath)
                       .then((path) => {
                         const target = publicPath ? this.formatPublicPath(publicPath, path) : path;
